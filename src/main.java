@@ -67,16 +67,16 @@ public class main {
         }
         System.out.println();*/
 
-        /*UnorderedMaxPQ unorderedMaxPQ = new UnorderedMaxPQ(9);
-        unorderedMaxPQ.insert(2);
-        unorderedMaxPQ.insert(7);
-        unorderedMaxPQ.insert(8);
-        unorderedMaxPQ.insert(1);
-        unorderedMaxPQ.insert(9);
-        unorderedMaxPQ.insert(5);
-        unorderedMaxPQ.insert(3);
-        unorderedMaxPQ.insert(6);
-        unorderedMaxPQ.insert(4);
+        /*MaxPQ maxPQ = new UnorderedMaxPQ(9);
+        maxPQ.insert(2);
+        maxPQ.insert(7);
+        maxPQ.insert(8);
+        maxPQ.insert(1);
+        maxPQ.insert(9);
+        maxPQ.insert(5);
+        maxPQ.insert(3);
+        maxPQ.insert(6);
+        maxPQ.insert(4);
 
         System.out.println(unorderedMaxPQ.isEmpty());
         System.out.println(unorderedMaxPQ.delMax());
@@ -120,7 +120,7 @@ public class main {
         tree.inorder();*/
 
         Graph graph = new Graph(11);
-        /*graph.addEdge(new Edge(0, 1, 7));
+        graph.addEdge(new Edge(0, 1, 7));
         graph.addEdge(new Edge(0, 2, 6));
         graph.addEdge(new Edge(0, 3, 9));
         graph.addEdge(new Edge(1, 2, 2));
@@ -135,9 +135,13 @@ public class main {
         graph.addEdge(new Edge(5, 6, 3));
         graph.addEdge(new Edge(5, 7, 8));
         graph.addEdge(new Edge(6, 7, 16));
-        Prim prim = new Prim(graph);
+        /*Prim prim = new Prim(graph);
         System.out.println(prim.mst());*/
-        graph.addEdge(new Edge(1, 4, 0));
+        Dijkstra dijkstra = new Dijkstra(graph, 0);
+        for (int i = 0; i < 8; ++i) {
+            System.out.println(dijkstra.shortestPath(i));
+        }
+        /*graph.addEdge(new Edge(1, 4, 0));
         graph.addEdge(new Edge(4,3,0));
         graph.addEdge(new Edge(3,10,0));
         graph.addEdge(new Edge(1,2,0));
@@ -151,6 +155,6 @@ public class main {
         graph.addEdge(new Edge(5,8,0));
         graph.addEdge(new Edge(5,6,0));
         BFSAlgorithm bfs = new BFSAlgorithm(graph, 1);
-        bfs.getResult();
+        bfs.getResult();*/
     }
 }

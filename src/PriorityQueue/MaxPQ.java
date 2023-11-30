@@ -19,9 +19,40 @@ package PriorityQueue;
     //search(Object o): return the position of o if it is in stack
 */
 
-public class UnorderedMaxPQ {
+public class MaxPQ {
     private int[] pq;
     private int n;
+
+    public MaxPQ(int maxN) {
+        pq = new int[maxN + 1];
+    }
+
+    public boolean isEmpty() {
+        return (n == 0);
+    }
+
+    public void insert(int key) {
+        pq[++n] = key;
+        swim(n);
+    }
+
+    public int maxKey() {
+        return pq[1];
+    }
+
+    public int delMax() {
+        int _max = pq[1];
+        swap(1, n--);
+        sink(1);
+        return _max;
+    }
+
+    public void printf() {
+        for (int i : pq) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+    }
 
     private void swap(int i, int j) {
         int temp = pq[i];
@@ -45,33 +76,5 @@ public class UnorderedMaxPQ {
             swap(k, j);
             k = j;
         }
-    }
-
-    public UnorderedMaxPQ(int capacity) {
-        pq = new int[capacity + 1];
-    }
-
-    public boolean isEmpty() {
-        return (n == 0);
-    }
-
-    public void insert(int key) {
-        pq[++n] = key;
-        swim(n);
-    }
-
-    public int delMax() {
-        int _max = pq[1];
-        swap(1, n);
-        n--;
-        sink(1);
-        return _max;
-    }
-
-    public void printf() {
-        for (int i : pq) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
     }
 }

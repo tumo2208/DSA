@@ -1,9 +1,6 @@
 package Graphs;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class BFSAlgorithm {
     private List<Integer> result;               //List các đỉnh được sắp xếp theo BFS
@@ -30,10 +27,9 @@ public class BFSAlgorithm {
             result.add(index);
 
             //Xét các đỉnh liền kề với đỉnh vừa được duyệt
-            for (Edge edge : graph.adj(index)) {
-                int w = edge.other(index);
-
-                //Nếu đỉnh đó chưa được duyệt, thêm đỉnh đó vào queue và đánh dấu là đã thăm
+            Iterator<Edge> ite = graph.adj(index).listIterator();
+            while (ite.hasNext()) {
+                int w = ite.next().other(index);
                 if (!marked[w]) {
                     marked[w] = true;
                     queue.add(w);

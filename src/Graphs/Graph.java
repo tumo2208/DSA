@@ -13,7 +13,8 @@ public class Graph {
         this.v = v;
         adj = new ArrayList<>(v);
         for (int i = 0; i < v; ++i) {
-            adj.add(new ArrayList<>());
+            List<Edge> edges = new ArrayList<>();
+            adj.add(edges);
         }
     }
 

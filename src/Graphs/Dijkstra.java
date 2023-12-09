@@ -1,41 +1,70 @@
 package Graphs;
 
 import java.util.PriorityQueue;
-import PriorityQueue.IndexMinPQ;
+
+class Pair implements Comparable<Pair> {
+    private int index;
+    private double weight;
+
+    public Pair(int index, double weight) {
+        this.index = index;
+        this.weight = weight;
+    }
+
+    public int getIndex() {
+        return this.index;
+    }
+
+    public int compareTo(Pair pair) {
+        if (this.index != pair.getIndex()) {
+            return Double.compare(this.weight, pair.weight);
+        } else {
+            return Integer.compare(this.index, pair.getIndex());
+        }
+    }
+
+}
+
 
 public class Dijkstra {
-    private double[] shortesPath;
-    private IndexMinPQ<Double> pq;
+    private double[] shortestPath;
+    private PriorityQueue<Pair> pq;
 
     public Dijkstra(Graph graph, int s) {
-        shortesPath = new double[graph.V()];
-        pq = new IndexMinPQ<>(graph.V());
+        shortestPath = new double[graph.V()];
+        pq = new PriorityQueue<>(graph.V());
 
         for (int i = 0; i < graph.V(); ++i) {
-            shortesPath[i] = Double.MAX_VALUE;
+            shortestPath[i] = Double.POSITIVE_INFINITY;
         }
-        shortesPath[s] = 0.d;
 
-        pq.insert(s, 0.0);
+        shortestPath[s] = 0.0;
+        pq.add(new Pair(s, shortestPath[s]));
+
         while (!pq.isEmpty()) {
-            int v = pq.delMin();
-            for (Edge edge : graph.adj(v)) {
-                relax(edge);
+            Pair p = pq.remove();
+            int v = p.getIndex();
+            for(Edge e : graph.adj(v)) {
+                relax(e, v);
             }
         }
     }
 
-    private void relax(Edge edge) {
-        int v = edge.either();
-        int w = edge.other(v);
-        if (shortesPath[w] > shortesPath[v] + edge.getWeight()) {
-            shortesPath[w] = shortesPath[v] + edge.getWeight();
-            if (pq.contains(w)) pq.decreaseKey(w, shortesPath[w]);
-            else pq.insert(w, shortesPath[w]);
+    private void relax(Edge e, int v) {
+        int  w = e.other(v);
+        if (shortestPath[w] > shortestPath[v] + e.getWeight()) {
+            shortestPath[w] = shortestPath[v] + e.getWeight();
+            for (Pair pair : pq) {
+                if (pair.getIndex() == w) {
+                    pq.remove(pair);
+                    break;
+                }
+            }
+            pq.add(new Pair(w, shortestPath[w]));
         }
     }
 
     public double shortestPath(int w) {
-        return shortesPath[w];
+        return shortestPath[w];
     }
 }

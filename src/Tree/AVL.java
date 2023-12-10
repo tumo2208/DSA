@@ -12,33 +12,24 @@ class AVLNode {
 
 public class AVL {
 
-    // A utility function to get the height of the tree
-    private int height(AVLNode N) {
-        if (N == null)
+    private AVLNode root;
+
+    public AVL() {
+        root = null;
+    }
+
+    private int height(AVLNode node) {
+        if (node == null) {
             return 0;
-
-        return N.height;
+        } else return node.height;
     }
 
-    // A utility function to get maximum of two integers
-    private int max(int a, int b) {
-        return Math.max(a, b);
+    private int getBalance(AVLNode node) {
+        if (node == null) {
+            return 0;
+        } else return (height(node.left) - height(node.right));
     }
 
-    /* Given a non-empty binary search tree, return the
-    node with minimum key value found in that tree.
-    Note that the entire tree does not need to be
-    searched. */
-    AVLNode minValueNode(AVLNode node)
-    {
-        AVLNode current = node;
-
-        /* loop down to find the leftmost leaf */
-        while (current.left != null)
-            current = current.left;
-
-        return current;
-    }
 
     /*
          y                                x
@@ -47,198 +38,126 @@ public class AVL {
       / \       < - - - - - - -            / \
      T1  T2     Left Rotation            T2  T3
      */
-
-    // A utility function to right rotate subtree rooted with y
-    // See the diagram given above.
     private AVLNode rightRotate(AVLNode y) {
         AVLNode x = y.left;
         AVLNode T2 = x.right;
-
-        // Perform rotation
         x.right = y;
         y.left = T2;
-
-        // Update heights
-        y.height = max(height(y.left), height(y.right)) + 1;
-        x.height = max(height(x.left), height(x.right)) + 1;
-
-        // Return new root
+        y.height = Math.max(height(y.left), height(y.right)) + 1;
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
         return x;
     }
 
-    // A utility function to left rotate subtree rooted with x
-    // See the diagram given above.
     private AVLNode leftRotate(AVLNode x) {
         AVLNode y = x.right;
         AVLNode T2 = y.left;
-
-        // Perform rotation
         y.left = x;
         x.right = T2;
-
-        //  Update heights
-        x.height = max(height(x.left), height(x.right)) + 1;
-        y.height = max(height(y.left), height(y.right)) + 1;
-
-        // Return new root
+        x.height = Math.max(x.left.height, x.right.height) + 1;
+        y.height = Math.max(y.left.height, y.right.height) + 1;
         return y;
     }
 
-    // Get Balance factor of node N
-    private int getBalance(AVLNode N) {
-        if (N == null)
-            return 0;
-
-        return height(N.left) - height(N.right);
+    public AVLNode insert(int key) {
+        root = insert(root, key);
+        return root;
     }
 
-    public AVLNode insert(AVLNode node, int key) {
+    private AVLNode insert(AVLNode root, int key) {
+        if (root == null) {
+            return new AVLNode(key);
+        } else {
+            if (root.key > key) {
+                root.left = insert(root.left, key);
+            } else {
+                root.right = insert(root.right, key);
+            }
 
-        /* 1.  Perform the normal BST insertion */
-        if (node == null)
-            return (new AVLNode(key));
+            root.height = Math.max(height(root.left), height(root.right)) + 1;
+            int bal = getBalance(root);
 
-        if (key < node.key)
-            node.left = insert(node.left, key);
-        else if (key > node.key)
-            node.right = insert(node.right, key);
-        else // Duplicate keys not allowed
-            return node;
+            if (bal > 1 && key < root.left.key) {
+                root = rightRotate(root);
+            } else if (bal > 1 && key > root.left.key) {
+                root.left = leftRotate(root.left);
+                root = rightRotate(root);
+            } else if (bal < -1 && key > root.right.key) {
+                root = leftRotate(root);
+            } else if (bal < -1 && key < root.right.key) {
+                root.right = rightRotate(root.right);
+                root = leftRotate(root);
+            }
 
-        /* 2. Update height of this ancestor node */
-        node.height = 1 + max(height(node.left),
-                height(node.right));
-
-        /* 3. Get the balance factor of this ancestor
-              node to check whether this node became
-              unbalanced */
-        int balance = getBalance(node);
-
-        // If this node becomes unbalanced, then there
-        // are 4 cases Left Left Case
-        if (balance > 1 && key < node.left.key)
-            return rightRotate(node);
-
-        // Right Right Case
-        if (balance < -1 && key > node.right.key)
-            return leftRotate(node);
-
-        // Left Right Case
-        if (balance > 1 && key > node.left.key) {
-            node.left = leftRotate(node.left);
-            return rightRotate(node);
-        }
-
-        // Right Left Case
-        if (balance < -1 && key < node.right.key) {
-            node.right = rightRotate(node.right);
-            return leftRotate(node);
-        }
-
-        /* return the (unchanged) node pointer */
-        return node;
-    }
-
-    public AVLNode deleteNode(AVLNode root, int key)
-    {
-        // STEP 1: PERFORM STANDARD BST DELETE
-        if (root == null)
             return root;
+        }
+    }
 
-        // If the key to be deleted is smaller than
-        // the root's key, then it lies in left subtree
-        if (key < root.key)
-            root.left = deleteNode(root.left, key);
+    public AVLNode delete(int key) {
+        root = delete(root, key);
+        return root;
+    }
 
-            // If the key to be deleted is greater than the
-            // root's key, then it lies in right subtree
-        else if (key > root.key)
-            root.right = deleteNode(root.right, key);
+    private AVLNode delete(AVLNode root, int key) {
+        if (root == null) {
+            return null;
+        } else if (root.key > key) {
+            root.left = delete(root.left, key);
 
-            // if key is same as root's key, then this is the node
-            // to be deleted
-        else
-        {
+        } else if (root.key < key) {
+            root.right = delete(root.right, key);
 
-            // node with only one child or no child
-            if ((root.left == null) || (root.right == null))
-            {
-                AVLNode temp = null;
-                if (temp == root.left)
-                    temp = root.right;
-                else
-                    temp = root.left;
-
-                // No child case
-                if (temp == null)
-                {
-                    temp = root;
-                    root = null;
+        } else {
+            if (root.left == null) {
+                root = root.right;
+            } else if (root.right == null) {
+                root = root.left;
+            } else {
+                AVLNode rightDelete = root;
+                AVLNode newNodeDelete = root.right;
+                while (newNodeDelete.left != null) {
+                    rightDelete = newNodeDelete;
+                    newNodeDelete = newNodeDelete.left;
                 }
-                else // One child case
-                    root = temp; // Copy the contents of
-                // the non-empty child
-            }
-            else
-            {
-
-                // node with two children: Get the inorder
-                // successor (smallest in the right subtree)
-                AVLNode temp = minValueNode(root.right);
-
-                // Copy the inorder successor's data to this node
-                root.key = temp.key;
-
-                // Delete the inorder successor
-                root.right = deleteNode(root.right, temp.key);
+                if (rightDelete == root) {
+                    rightDelete.right = newNodeDelete.right;
+                } else {
+                    rightDelete.left = newNodeDelete.right;
+                }
+                root.key = newNodeDelete.key;
             }
         }
 
-        // If the tree had only one node then return
-        if (root == null)
-            return root;
+        if (root == null) {
+            return null;
+        }
 
-        // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE
-        root.height = max(height(root.left), height(root.right)) + 1;
+        root.height = Math.max(height(root.left), height(root.right)) + 1;
+        int bal = getBalance(root);
 
-        // STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether
-        // this node became unbalanced)
-        int balance = getBalance(root);
-
-        // If this node becomes unbalanced, then there are 4 cases
-        // Left Left Case
-        if (balance > 1 && getBalance(root.left) >= 0)
-            return rightRotate(root);
-
-        // Left Right Case
-        if (balance > 1 && getBalance(root.left) < 0)
-        {
+        if (bal > 1 && getBalance(root.left) >= 0) {
+            root = rightRotate(root);
+        } else if (bal > 1 && getBalance(root.left) < 0) {
             root.left = leftRotate(root.left);
-            return rightRotate(root);
-        }
-
-        // Right Right Case
-        if (balance < -1 && getBalance(root.right) <= 0)
-            return leftRotate(root);
-
-        // Right Left Case
-        if (balance < -1 && getBalance(root.right) > 0)
-        {
+            root = rightRotate(root);
+        } else if (bal < -1 && getBalance(root.right) <= 0) {
+            root = leftRotate(root);
+        } else if (bal < -1 && getBalance(root.right) > 0) {
             root.right = rightRotate(root.right);
-            return leftRotate(root);
+            root = leftRotate(root);
         }
 
         return root;
     }
 
-    // A utility function to print preorder traversal
-    // of the tree.
-    // The function also prints height of every node
-    private void preOrder(AVLNode node) {
-        if (node != null) {
-            System.out.print(node.key + " ");
-            preOrder(node.left);
-            preOrder(node.right);
+    public void inorder() {
+        inorder(root);
+    }
+
+    private void inorder(AVLNode root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.key + " ");
+            inorder(root.right);
         }
     }
 }

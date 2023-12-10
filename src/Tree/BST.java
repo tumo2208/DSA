@@ -28,11 +28,11 @@ public class BST {
     }
 
     private Node insert(Node root, int key) {
-        if (root == null) {
+        Node node = root;
+        if (node == null) {
             return new Node(key);
         } else {
-            Node node = root;
-            if (key < node.key) {
+            if (node.key > key) {
                 node.left = insert(node.left, key);
             } else {
                 node.right = insert(node.right, key);
@@ -57,10 +57,10 @@ public class BST {
         return search(root, key);
     }
 
-    private Node search(Node root, int key) {
+    public Node search(Node root, int key) {
         if (root == null || root.key == key) {
             return root;
-        } else if (key < root.key) {
+        } else if (root.key > key) {
             return search(root.left, key);
         } else {
             return search(root.right, key);
@@ -68,39 +68,39 @@ public class BST {
     }
 
     public Node delete(int key) {
-        return delete(root, key);
+        root = delete(root, key);
+        return root;
     }
 
     private Node delete(Node root, int key) {
-        System.out.println(root.key);
-        if (key < root.key) {
+        if (root == null) {
+            return null;
+        } else if (root.key > key) {
             root.left = delete(root.left, key);
             return root;
-        } else if (key > root.key) {
+        } else if (root.key < key) {
             root.right = delete(root.right, key);
             return root;
-        }
-
-        if (root.left == null) {
-            return root.right;
-        } else if (root.right == null) {
-            return root.left;
         } else {
-            Node nodeDelete = root;
-            Node rightDelete = root.right;
-            System.out.println(nodeDelete.key + " " + rightDelete.key);
-            while (rightDelete.left != null) {
-                nodeDelete = rightDelete;
-                rightDelete = rightDelete.left;
-                System.out.println(nodeDelete.key + " " + rightDelete.key);
-            }
-            if (nodeDelete != root) {
-                nodeDelete.left = rightDelete.right;
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
             } else {
-                nodeDelete.right = rightDelete.right;
+                Node rightDelete = root;
+                Node newNodeDelete = root.right;
+                while (newNodeDelete.left != null) {
+                    rightDelete = newNodeDelete;
+                    newNodeDelete = newNodeDelete.left;
+                }
+                if (rightDelete == root) {
+                    rightDelete.right = newNodeDelete.right;
+                } else {
+                    rightDelete.left = newNodeDelete.right;
+                }
+                root.key = newNodeDelete.key;
+                return root;
             }
-            root.key = rightDelete.key;
-            return root;
         }
     }
 }

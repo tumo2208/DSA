@@ -4,6 +4,7 @@ import Graphs.*;
 import Sort.*;
 import PriorityQueue.*;
 import DynamicConnectivity.*;
+import Tree.AVL;
 import Tree.BST;
 
 public class main {
@@ -67,6 +68,7 @@ public class main {
         }
         System.out.println();*/
 
+
         /*MaxPQ maxPQ = new UnorderedMaxPQ(9);
         maxPQ.insert(2);
         maxPQ.insert(7);
@@ -82,6 +84,7 @@ public class main {
         System.out.println(unorderedMaxPQ.delMax());
         unorderedMaxPQ.printf();*/
 
+
         /*QuickUnionUF uf = new QuickUnionUF(10);
         uf.union(4, 3);
         uf.union(3, 8);
@@ -95,31 +98,55 @@ public class main {
         uf.printList();
         System.out.println(uf.connected(3, 4));*/
 
-        BST tree = new BST();
 
         /* Let us create following BST
               50
            /     \
           30      70
          /  \    /  \
-       20   40  60   80 */
-        /*tree.insert(50);
+       20   40  60   80
+           /  \
+          35   45
+              /
+             43
+               \
+                44
+        */
+        /*BST tree = new BST();
+        tree.insert(50);
         tree.insert(30);
         tree.insert(20);
         tree.insert(40);
         tree.insert(70);
         tree.insert(60);
         tree.insert(80);
-        tree.insert(10);
-        tree.insert(25);
-        tree.insert(24);
+        tree.insert(35);
+        tree.insert(45);
+        tree.insert(43);
+        tree.insert(44);
 
-        // Print inorder traversal of the BST
-        //tree.inorder();
-        tree.delete(20);
+        tree.delete(40);
         tree.inorder();*/
 
-        Graph graph = new Graph(11);
+
+        AVL tree = new AVL();
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(15);
+        tree.insert(35);
+        //tree.insert(45);
+        //tree.insert(43);
+        //tree.insert(44);
+
+        tree.delete(60);
+        tree.inorder();
+
+
+        /*Graph graph = new Graph(11);
         graph.addEdge(new Edge(0, 1, 7));
         graph.addEdge(new Edge(0, 2, 6));
         graph.addEdge(new Edge(0, 3, 9));
@@ -135,12 +162,12 @@ public class main {
         graph.addEdge(new Edge(5, 6, 3));
         graph.addEdge(new Edge(5, 7, 8));
         graph.addEdge(new Edge(6, 7, 16));
-        /*Prim prim = new Prim(graph);
-        System.out.println(prim.mst());*/
+        Prim prim = new Prim(graph);
+        System.out.println(prim.mst());
         Dijkstra dijkstra = new Dijkstra(graph, 0);
         for (int i = 0; i < 8; ++i) {
-            System.out.println(dijkstra.shortestPath(i));
-        }
+            System.out.print(dijkstra.shortestPath(i) + " ");
+        }*/
         /*graph.addEdge(new Edge(1, 4, 0));
         graph.addEdge(new Edge(4,3,0));
         graph.addEdge(new Edge(3,10,0));

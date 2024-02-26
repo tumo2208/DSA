@@ -1,9 +1,14 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.*;
 
 import Graphs.*;
 import Sort.*;
 import PriorityQueue.*;
 import DynamicConnectivity.*;
+import SubString.BoyerMoore;
 import Tree.AVL;
 import Tree.BST;
 
@@ -168,7 +173,10 @@ public class main {
         for (int i = 0; i < 8; ++i) {
             System.out.print(dijkstra.shortestPath(i) + " ");
         }*/
-        /*graph.addEdge(new Edge(1, 4, 0));
+
+
+        /*Graph graph = new Graph(11);
+        graph.addEdge(new Edge(1, 4, 0));
         graph.addEdge(new Edge(4,3,0));
         graph.addEdge(new Edge(3,10,0));
         graph.addEdge(new Edge(1,2,0));
@@ -181,7 +189,69 @@ public class main {
         graph.addEdge(new Edge(2,7,0));
         graph.addEdge(new Edge(5,8,0));
         graph.addEdge(new Edge(5,6,0));
-        BFSAlgorithm bfs = new BFSAlgorithm(graph, 1);
-        bfs.getResult();*/
+        DFSAlgorithm dfs = new DFSAlgorithm(graph, 1);
+        dfs.getResult();*/
+
+
+        // Tìm thành phần liên thông
+        /*List<List<Integer>> edges = new ArrayList<>();
+        edges.add(List.of(1,2));
+        edges.add(List.of(2,5));
+        edges.add(List.of(5,9));
+        edges.add(List.of(1,9));
+        edges.add(List.of(9,6));
+        edges.add(List.of(3,7));
+        edges.add(List.of(7,8));
+        edges.add(List.of(8,4));
+        edges.add(List.of(10,11));
+        edges.add(List.of(10,12));
+        int V = 13;
+        QuickUnionUF uf = new QuickUnionUF(V);
+        int res = 1;
+        for (List<Integer> edge : edges) {
+            int v = edge.get(0);
+            int w = edge.get(1);
+            if (!uf.connected(v, w)) {
+                uf.union(v, w);
+            }
+        }
+        int[] id = new int[13];
+        for (int i = 1; i < 13; ++i) {
+            id[i] = uf.find(i);
+        }
+        Arrays.sort(id);
+        for (int i = 2; i < 13; ++i) {
+            if (id[i] != id[i-1]) res++;
+        }
+        System.out.println(res);*/
+
+
+        /*String pat = "fuck";
+        String txt = "yourmotherisfuckkingbitch";
+        System.out.println(BoyerMoore.search(pat, txt));*/
+
+
+        // Trích xuất testcase dài hackkerrank
+        /*try {
+            FileReader fd = new FileReader("C:\\Users\\ADMIN\\Desktop\\DSA\\File\\data.txt");
+            BufferedReader bf = new BufferedReader(fd);
+            FileWriter fw = new FileWriter("C:\\Users\\ADMIN\\Desktop\\DSA\\File\\data2.txt");
+            BufferedWriter bw = new BufferedWriter(fw);
+            int cnt = 0;
+            String line;
+            for (int i = 0; i < 82066; ++i) {
+                line = bf.readLine();
+            }
+            while (cnt < 25943 && (line = bf.readLine()) != null) {
+                bw.write(line + "\n");
+                cnt++;
+            }
+            bf.close();
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        //CHECK GIT
     }
 }
